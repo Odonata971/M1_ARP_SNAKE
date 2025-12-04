@@ -1,19 +1,28 @@
 
-
 # UP, DOWN, LEFT, RIGHT
 DIRECTIONS : list[list[int]] = [[-1, 0], [1, 0], [0, -1], [0, 1]]
 
+# Initialize a 9x9 grid with all cells set to 0
 grid : list[list[int]] = [[0 for _ in range(9)] for _ in range(9)]
 
+# Starting and ending points of the snake
 startingPoint: tuple[int, int] = (0,0)
 endingPoint : tuple[int, int] = (len(grid[0])- 1, len(grid)- 1)
 
+#Quantity of cells to fill in each column and row
 col_quantities : list[int] = [6, 4, 4, 3, 3, 7, 1, 4, 1]
 row_quantities : list[int] = [1, 6, 1, 4, 3, 4, 3, 4, 7]
 
 
-
 def backtrack(grid, row : int, col : int) -> bool:
+    """Backtracking algorithm to find the snake path.
+    Args:
+        grid (list[list[int]]): current state of the grid.
+        row (int): current row of the snake's head.
+        col (int): current column of the snake's head.
+    Returns:
+        bool: True if a solution is found, else False.
+    """
     if not is_move_valid(grid, row, col):
         return False
 
@@ -38,6 +47,13 @@ def backtrack(grid, row : int, col : int) -> bool:
 
 
 def is_finished(row, col) -> bool:
+    """Check if the current state is a finished solution.
+    Args:
+        row (int): current row of the snake's head.
+        col (int): current column of the snake's head.
+    Returns:
+        bool
+    """
     if row != endingPoint[0] or col != endingPoint[1]:
         return False
 
@@ -53,6 +69,14 @@ def is_finished(row, col) -> bool:
 
 
 def output(grid : list[list[int]]) -> None:
+    """Displays grid.
+
+    Args:
+        grid (list[list[int]]): final solution grid.
+
+    Returns:
+        None
+    """
     print('\n'.join(', '.join(str(cell) for cell in row) for row in grid))
 
 
@@ -60,20 +84,20 @@ def output(grid : list[list[int]]) -> None:
 def is_move_valid(grid : list[list[int]], row_next_move : int, col_next_move : int) -> bool :
     """Verify if a move to (row_next_move, col_next_move) is valid.
 
-        Conditions :
-        - position must be within grid limits
-        - targeted cell is free (value to 0)
-        - targeted cell do not touch snake's body other than previous head
-        - line and column quantities stay greater than 0 after this move
+    Conditions :
+    - position must be within grid limits
+    - targeted cell is free (value to 0)
+    - targeted cell do not touch snake's body other than previous head
+    - line and column quantities stay greater than 0 after this move
 
-        Args:
-            grid (list[list[int]]): grid showing current state.
-            row_next_move (int)  targeted cell row.
-            col_next_move (int) : targeted cell col.
+    Args:
+        grid (list[list[int]]): grid showing current state.
+        row_next_move (int)  targeted cell row.
+        col_next_move (int) : targeted cell col.
 
-        Returns:
-            bool: True if move valid, else False.
-        """
+    Returns:
+        bool: True if move valid, else False.
+    """
     if is_out_of_grid(row_next_move, col_next_move):
         return False
 
@@ -99,12 +123,18 @@ def is_move_valid(grid : list[list[int]], row_next_move : int, col_next_move : i
     return neighbour_sum == 1
 
 
-
 def is_out_of_grid(row : int, col : int) -> bool:
+    """Check if the given position is out of grid bounds.
+    Args:
+        row (int): row index to check.
+        col (int): column index to check.
+    Returns:
+        bool: True if out of bounds, else False.
+    """
     return row >= len(grid[0]) or row < 0 or col >= len(grid) or col < 0
 
 
-
+# Main execution
 if __name__ == "__main__":
     result = backtrack(grid, 0, 0)
     print(f"Solution found: ")
